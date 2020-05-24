@@ -25,7 +25,7 @@ Implement a clone of the classic Snake game as a Gym environment, and solve it w
 
 ### Requests
 
-### Slithering Game Clone
+#### Slithering Game Clone
 ```
 
 Slitherin’. Implement and solve a multiplayer clone of the classic Snake game (see slither.io for inspiration) as a Gym environment.
@@ -35,7 +35,7 @@ Agent: solve the environment using self-play with an RL algorithm of your choice
 Inspect the learned behavior: does the agent learn to competently pursue food and avoid other snakes? Does the agent learn to attack, trap, or gang up against the competing snakes? Tweet us videos of the learned policies!
 ```
 
-### Distrubuted Parameter Averaging
+#### Distrubuted Parameter Averaging
 ```
 
 Parameter Averaging in Distributed RL. Explore the effect of parameter averaging schemes on sample complexity and amount of communication in RL algorithms. While the simplest solution is to average the gradients from every worker on every update, you can save on communication bandwidth by independently updating workers and then infrequently averaging parameters. In RL, this may have another benefit: at any given time we’ll have agents with different parameters, which could lead to better exploration behavior. Another possibility is use algorithms like EASGD that bring parameters partly together each update.
