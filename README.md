@@ -6,11 +6,11 @@
 
 ### Warmup
 
-'''
+```
 
 code 
 
-'''
+```
 
 #### XOR LSTM
 
