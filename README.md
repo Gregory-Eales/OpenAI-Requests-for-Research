@@ -6,7 +6,14 @@
 
 ### Warmup
 
+'''
+
+code 
+
+'''
+
 #### XOR LSTM
+
 '''
 
 Train an LSTM to solve the XOR problem: that is, given a sequence of bits, determine its parity. The LSTM should consume the sequence, one bit at a time, and then output the correct answer at the sequence’s end. Test the two approaches below:
@@ -16,6 +23,7 @@ Generate a dataset of random 100,000 binary strings, where the length of each st
 '''
 
 #### Snake Game
+
 '''
 
 Implement a clone of the classic Snake game as a Gym environment, and solve it with a reinforcement learning algorithm of your choice. Tweet us videos of the agent playing. Were you able to train a policy that wins the game?
