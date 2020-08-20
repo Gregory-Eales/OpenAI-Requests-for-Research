@@ -33,19 +33,24 @@ def generate_bit_string(n):
 
     return bit_string, parity
 
-def generate_bit_strings(m, n):
-    bit_strings = []
-    parities = []
-    for i in range(m):
-        bit_string, parity = generate_bit_string(n)
-        bit_strings.append(bit_string)
-        parities.append(parity)
+def generate_bit_strings(l, w):
+    return np.random.randint(low=0, high=1, size=[l, w])
+
+
+def generate_data(l, w):
+
+    bit_strings = generate_bit_strings(l, w)
+    parities = get_parities(bit_strings)
+
+    assert bitstrings.shape[0] == parities.shape[0]
+
     return bit_strings, parities
 
 
 def main():
+
     t = time.time()
-    bit_strings, parities = generate_bit_strings(100000, 50)
+    generate_bit_strings(100000, 50)
     print(time.time()-t)
 
 if __name__ == "__main__":
