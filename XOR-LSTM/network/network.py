@@ -1,22 +1,22 @@
 import torch
 from tqdm import tqdm
 import numpy as np
-from copy import copy
 
 class Network(torch.nn.Module):
 
-    def __init__(self, in_dim, out_dim, hid_dim, num_lay=1, lr=10e-1):
+    def __init__(self, in_dim, out_dim, hid_dim, num_lay=1, lr=1):
 
         super(Network, self).__init__()
 
         self.define_network(in_dim, out_dim, hid_dim, num_lay)
 
         self.loss = torch.nn.BCEWithLogitsLoss()
-        self.optimizer = torch.optim.Adam(self.parameters(), lr=lr)
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=lr)
 
         if torch.cuda.is_available():
              self.device = torch.device("cuda:0")
-        else: self.device = torch.device("cpu:0")
+        else:
+            self.device = torch.device("cpu:0")
         self.to(device=self.device)
 
         self.historical_loss = []
@@ -39,40 +39,17 @@ class Network(torch.nn.Module):
 
         out = torch.Tensor(x).to(self.device)
 
-        #print(out.shape)
-
         out = self.lstm(out)
 
-        #print(out[0][-1].shape)
-
-        #print(out[0].shape)
-
-
-        out = self.fc(out[0][0].reshape(x.shape[1], -1))
+        out = self.fc(out[0][-1].reshape(x.shape[1], -1))
         out = self.sigmoid(out)
-
-        #out = self.sigmoid(out[0][-1].reshape(-1, 1))
-
-        #print(out.shape)
 
         return out.to(torch.device("cpu:0"))
 
     def optimize(self, x, y, batch_sz, iters):
         
-        a = torch.Tensor(x)
-        a = 1-torch.sum(a, dim=1, keepdim=True)%2
-        print(a.shape)
-        print()
-
-        #print(a[a%2 == 0])
-        print(a)
-        print("ACC: ", self.accuracy(a, torch.Tensor(y)))
-
-        x = torch.Tensor(x.reshape([x.shape[1], x.shape[0], 1]))
+        x = torch.Tensor(x).reshape(x.shape[1], x.shape[0], 1)
         y = torch.Tensor(y)
-
-        print(x)
-        print(y)
 
         num_batches = y.shape[0]//batch_sz
 
@@ -88,19 +65,15 @@ class Network(torch.nn.Module):
                 p = self.forward(x[:,b*batch_sz:(b+1)*batch_sz,:])
                 #self.accuracy(p, y[b*batch_sz:(b+1)*batch_sz, :])
                 loss = self.loss(p, y[b*batch_sz:(b+1)*batch_sz, :])
-
+              
                 run_loss += loss.detach()/num_batches
                 run_acc += self.accuracy(p, y[b*batch_sz:(b+1)*batch_sz, :])/num_batches
 
                 loss.backward()
                 self.optimizer.step()
-    
-            self.historical_loss.append(copy(run_loss))  
-            self.historical_accuracy.append(run_acc) 
 
-        x = 1-torch.sum(x.reshape(y.shape[0], -1), dim=1, keepdim=True)%2
-        print(x.shape)
-        print(self.accuracy(x, y))
+            self.historical_loss.append(run_loss)
+            self.historical_accuracy.append(run_acc) 
 
     def accuracy(self, p, y):
 
