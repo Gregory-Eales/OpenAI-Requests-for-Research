@@ -11,19 +11,14 @@ from copy import copy
 class SnakeEnv(gym.Env):
   metadata = {'render.modes': ['human']}
 
-  def __init__(self, size=32):
+  def __init__(self, size=8):
 
       self.size = size
       self.window_size = 800
       self.scale = self.window_size/self.size
       self.reset()
 
-      pygame.init()
-      self.screen = pygame.display.set_mode([
-        self.window_size,
-        self.window_size])
-
-      self.screen.fill((0, 0, 0))
+      self.human_render = False
 
   def step(self, action):
     
@@ -47,6 +42,17 @@ class SnakeEnv(gym.Env):
       r = None
 
       if mode == 'human':
+
+        if not self.human_render:
+          pygame.init()
+          self.screen = pygame.display.set_mode([
+            self.window_size,
+            self.window_size])
+
+          self.screen.fill((0, 0, 0))
+
+
+        self.human_render = True
 
         pygame.init()
         self.screen = pygame.display.set_mode([
@@ -95,7 +101,7 @@ class SnakeEnv(gym.Env):
 
   def spawn_apple(self):
 
-    self.apple = np.random.randint(0, 17, [2]).tolist()
+    self.apple = np.random.randint(0, self.size, [2]).tolist()
 
   def update_player(self):
 
@@ -163,12 +169,31 @@ class SnakeEnv(gym.Env):
       self.points += 1
       self.player.append(last_pos)
 
-    return self.state
+    return self.to_array()
 
   def get_reward(self):
-    return None
 
-  def is_terminal(self): pass
+    # distance between apple and head
+    # 1 for each apple
+    # -10 for hitting a wall
+    # 
+    return self.points
+
+  def to_array(self):
+
+    self.state = np.zeros([self.size, self.size])
+
+    self.state[self.apple[0]][self.apple[1]] = 0.33
+
+    for link in self.player:
+
+      if link == self.player[0]:
+        self.state[link[0]][link[1]] = 1
+
+      else:
+        self.state[link[0]][link[1]] = 0.66
+
+    return self.state
 
 def main():
     import time
@@ -176,15 +201,16 @@ def main():
     t = time.time()
     env = SnakeEnv()
 
-    for i in range(1000):
-      action = env.render(mode='human')
-      state, reward, done, info = env.step(action)
+    for i in range(1000000):
+      #action = env.render(mode='human')
+      state, reward, done, info = env.step(3)
 
       if done: break
 
-      time.sleep(0.1)
+      #time.sleep(0.1)
       #print(env.player)
 
+    print(state)
     print("Took {} seconds".format(round(time.time()-t, 4)))
 
 if __name__ == "__main__":
