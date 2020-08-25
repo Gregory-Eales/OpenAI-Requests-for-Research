@@ -34,7 +34,6 @@ class PPO(object):
 
 	def update(self):
 
-
 		self.value.optimize(x, y)
 		self.policy.optimize(x, y)
 
