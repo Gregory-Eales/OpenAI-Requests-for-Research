@@ -15,7 +15,31 @@ class PPO(object):
 		self.buffer = Buffer()
 
 	def calc_advantage(self):
-		pass
+		
+		v1 = self.value()
+		v2 = self.value()
+
+		return v2 - v1
 
 
-	def get
+	def act(self, state):
+		
+
+		p = self.policy(state)
+		old_p = self.old_policy(state)
+
+
+		return action
+
+
+	def update(self):
+
+
+		self.value.optimize(x, y)
+		self.policy.optimize(x, y)
+
+def main():
+	pass
+
+if __name__ == "__main__":
+	main()

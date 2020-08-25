@@ -11,7 +11,7 @@ from copy import copy
 class SnakeEnv(gym.Env):
   metadata = {'render.modes': ['human']}
 
-  def __init__(self, size=8):
+  def __init__(self, size=16):
 
       self.size = size
       self.window_size = 800
@@ -201,14 +201,14 @@ def main():
     t = time.time()
     env = SnakeEnv()
 
-    for i in range(1000000):
-      #action = env.render(mode='human')
-      state, reward, done, info = env.step(3)
+    for i in range(1000):
+      action = env.render(mode='human')
+      state, reward, done, info = env.step(action)
 
       if done: break
 
-      #time.sleep(0.1)
-      #print(env.player)
+      time.sleep(0.1)
+      print(env.player)
 
     print(state)
     print("Took {} seconds".format(round(time.time()-t, 4)))
