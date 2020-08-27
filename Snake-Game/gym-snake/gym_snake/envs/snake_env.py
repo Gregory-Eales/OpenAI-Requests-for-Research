@@ -45,6 +45,12 @@ class SnakeEnv(gym.Env):
 
         if not self.human_render:
           pygame.init()
+
+
+          infoObject = pygame.display.Info()
+          #pygame.display.set_mode((infoObject.current_w, infoObject.current_h))
+          self.window_size = int(infoObject.current_h*3/4) + int(infoObject.current_h*3/4)%self.size
+          self.scale = self.window_size/self.size
           self.screen = pygame.display.set_mode([
             self.window_size,
             self.window_size])
@@ -208,9 +214,9 @@ def main():
       if done: break
 
       time.sleep(0.1)
-      print(env.player)
+      #print(env.player)
 
-    print(state)
+    #sprint(state)
     print("Took {} seconds".format(round(time.time()-t, 4)))
 
 if __name__ == "__main__":

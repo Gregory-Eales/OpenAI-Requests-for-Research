@@ -26,6 +26,30 @@ class Buffer(object):
 		self.rewards.append(reward)
 		self.terminals.append(done)
 
+		if done:
+			self.discount_rewards()
+
 	def store_policies(self, pi, pi_k):
 		self.policies.append(pi)
 		self.prev_policies.append(pi_k)
+
+	def get_trajectories(self):
+
+		s = torch.Tensor(self.states).float()
+		s_p = torch.Tensor(self.prev_states).float()
+		a = torch.Tensor(self.actions).float()
+		r = torch.Tensor(self.rewards).float()
+		d = torch.Tensor(self.terminals).float()
+
+		return s, s_p, a, r, d
+
+	def get_policies(self):
+		return None
+
+	def discount_rewards(self):
+
+		# get interval between terminal and last terminal
+		
+		pass
+
+
